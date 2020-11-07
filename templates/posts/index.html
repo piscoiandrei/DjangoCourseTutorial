@@ -1,0 +1,51 @@
+{% extends 'posts/base.html' %}
+
+{% block body %}
+    <div class="container pb-3 pt-3">
+        {% for post in posts %}
+            <div class="card mb-3" style="width: 770px;">
+                <img src="{{ post.image.url }}" alt=""
+                     style="width:768px;height:432px"
+                     class="card-img-top">
+                <div class="card-body">
+
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <small>{{ post.date }}</small>
+                    <p class="card-text">{{ post.content|truncatechars:150 }}</p>
+                    <a href="{% url 'detail' post.id %}"
+                       class="btn btn-primary float-right">More</a>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="container">
+        <div class="pagination">
+             <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page=1{% if request.GET.search_bar %}&search_bar={{ request.GET.search_bar }}{% endif %}"
+                >
+                    &laquo; first
+                </a>
+                <a href="?page={{ posts.previous_page_number }}{% if request.GET.search_bar %}&search_bar={{ request.GET.search_bar }}{% endif %}">
+                previous
+            </a>
+            {% endif %}
+
+                 <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                 </span>
+
+                 {% if posts.has_next %}
+                     <a href="?page={{ posts.next_page_number }}{% if request.GET.search_bar %}&search_bar={{ request.GET.search_bar }}{% endif %}">
+                         next
+                     </a>
+                     <a href="?page={{ posts.paginator.num_pages }}{% if request.GET.search_bar %}&search_bar={{ request.GET.search_bar }}{% endif %}">
+                         last &raquo;
+                     </a>
+                 {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}
